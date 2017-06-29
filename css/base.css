@@ -1,0 +1,63 @@
+#mapa{
+  width: auto;
+  height: 384px;
+}
+
+#load-parkings{
+  text-align: center;
+}
+
+img.newbanner{
+  width: 1426px;
+  height: 300px;
+}
+
+[id^="parking-"],
+[id^="parking2-"]{
+  width: 400px;
+}
+
+[id^="parking-"]:hover,
+[id^="parking2-"]:hover{
+  border: 5px solid yellow;
+  border-radius: 5px;
+}
+
+[id^="parking-"] h4,
+[id^="parking2-"] h4{
+  color: blue;
+}
+
+#desc-ppal{
+  width: 1100px;
+}
+
+#formulario{
+  padding-left: 360px;
+}
+
+[id^="coleccion-"]:hover{
+  border: 5px solid yellow;
+  border-radius: 5px;
+  cursor: grab;
+}
+
+#titulo{
+  margin-right: 240px;
+}
+
+#desc-instalaciones h5
+{
+  width: 700px;
+  color: blue;
+}
+
+#desc-instalaciones p
+{
+  width: 700px;
+}
+
+[id^="user-"]{
+    float: left;
+    width: 250px;
+}

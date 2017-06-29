@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AparcaMadrid</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img/emoticono_parking.jpg">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/business-casual.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Map -->
+    <link href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="js/base.js"></script>
+
+
+<!--
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!--<script src="js/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="js/base.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <img class="newbanner"src="img/banner7.png">
+    <div class="brand">AparcaMadrid</div>
+    <div class="address-bar">Tu modo para encontrar sitio</div>
+    <div id="load-parkings">
+      <button type="button" class="btn-info" id="cargar1">Cargar datos</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
+                <a class="navbar-brand" href="index.html">Business Casual</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a id="boton-principal">Principal</a>
+                    </li>
+                    <li>
+                        <a id="boton-colecciones">Colecciones</a>
+                    </li>
+                    <li>
+                        <a id="boton-instalaciones">Instalaciones</a>
+                    </li>
+                    <!--<li>
+                        <a href="contact.html">Contact</a>
+                    </li>-->
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+<div id="principal"><!--PRINCIPAL-->
+    <div class="container">
+        <div class="row">
+            <div class="box">
+              <div id="mapa"><!-- aqui el mapa de la pag principal--></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="box">
+                <div class="col-lg-7 col-md-7">
+                  <div id="desc-ppal"><!-- aqui la descripcion del aparcamiento de la pag principal--></div>
+                  <div id="fotos">
+                    <!-- aqui las fotos del aparcamiento de la pag principal-->
+                    <div class="box">
+                      <div class="col-lg-12 text-center">
+                        <div id="carousel-example-generic" class="carousel slide">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators hidden-xs">
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                            </ol>
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    <img id="foto-1" class="img-responsive img-full" src="img/gris_img.jpg" alt="">
+                                </div>
+                                <div class="item">
+                                    <img id="foto-2" class="img-responsive img-full" src="img/slide-2.jpg" alt="">
+                                </div>
+                                <div class="item">
+                                    <img id="foto-3" class="img-responsive img-full" src="img/slide-3.jpg" alt="">
+                                </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                <span class="icon-prev"></span>
+                            </a>
+                            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                <span class="icon-next"></span>
+                            </a>
+                        </div> <!-- div carrousel -->
+                      </div>
+                    </div>
+                  </div> <!-- div fotos -->
+                </div>
+                <div class="col-lg-5 col-md-5" id="lista">
+                    <div id="lista-ppal"><!-- aqui la lista de aparcamientos de la pag principal--></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- /.container -->
+</div> <!--PRINCIPAL-->
+
+<div id="colecciones"><!--COLECCIONES-->
+
+  <div class="container">
+      <div class="row">
+          <div class="box">
+            <div id="nueva-coleccion">
+              <hr>
+              <h2 class="intro-text text-center">Introduce
+                  <strong>el nombre de la colección a crear</strong>
+              </h2>
+              <hr>
+              <form action="/my-handling-form-page" method="post">
+                <div id="formulario">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" />
+                    <button id="boton-nueva-coleccion" class="button" type="submit">Crear colección</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="box">
+              <div class="col-lg-12">
+                  <div id="lista-colecciones">
+                      <!--aquí van todas las colecciones que se vayan creando-->
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="box">
+              <div class="col-lg-7 col-md-7">
+                <div id="titulo"></div>
+               <div id="aparcamientos-de-la-coleccion">
+                  <div id="sortable-lis" class='sortable sortable-list col-xs-12 col-sm-12 col-md-7 col-lg-7'>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5 col-md-5">
+                <div id=lista-parking-col>
+                    <!--aquí la lista de aparcamientos-->
+                </div>
+              </div>
+          </div>
+      </div>
+
+
+
+  </div>
+  <!-- /.container -->
+
+</div> <!--COLECCIONES-->
+
+
+<div id="instalaciones"><!--INSTALACIONES-->
+
+            <div class="row">
+                <div class="box">
+                    <div class="col-lg-6 col-md-6">
+                        <div id="desc-instalaciones">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div id="usuarios-asociados">
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="box">
+                    <div class="col-lg-12 col-md-12">
+                        <div id="lista-usuarios">
+                          <form  id="cargarU" action="/my-handling-form-page" method="post">
+                            <div id="formulario">
+                                <label for="name">APIKey:</label>
+                                <input type="text" id="api" />
+                                <button id="boton-usuarios" class="button" type="submit">Cargar Usuarios</button>
+                            </div>
+                          </form>
+                          <div id="usuarios"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+</div> <!--INSTALACIONES-->
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <p>Esta aplicación utiliza datos del portal de datos abiertos de la ciudad de Madrid</p>
+                    <a href="http://datos.madrid.es/" title="XML">ENLACE A LOS DATOS</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+</body>
+
+</html>
