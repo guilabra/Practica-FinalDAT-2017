@@ -61,3 +61,22 @@ img.newbanner{
     float: left;
     width: 250px;
 }
+
+#lista-ahora{
+  margin-left: 400px;
+}
+
+#formularioGIT{
+  padding-left: 0px;
+}
+
+#boton-guardar-git,
+#boton-cargar-git{
+  width: 150px;
+  text-align: center;
+
+}
+
+#boton-guardar-git{
+  margin-left: 350px;
+}

@@ -5,7 +5,9 @@ var lista;
 var num;
 var latitude;
 var longitude;
-var colecciones = [];
+var colecciones = {};
+var nombres_colecciones = [];
+var usuarios_instalaciones = {};
 var coleccion_activada;
 var usuarios_cargados = [];
 var usuarios_divs = [];
@@ -17,6 +19,7 @@ $("#boton-colecciones").hide();
 $("#boton-instalaciones").hide();
 $("#lista-ppal").hide();
 $("#mapa").hide();
+$("#resultado-cargar-git").hide();
 
 
   $("#cargar1").click(function(e){
@@ -106,12 +109,23 @@ $("#mapa").hide();
         $('#lista-ppal').html(html1);
         $('#lista-parking-col').empty();
         $('#lista-parking-col').html(html2);
-        hacerAparcSortables();
+        hacerAparcClicks();
 
         //Mostramos la info del parking al clickar sobre cada uno de ellos
         for (var i = 0; i < num; i++){
-          identificador = "#parking-" + i.toString();
+          var identificador = "#parking-" + i.toString();
+          var aparcamiento = "parking-" + i.toString();
+          usuarios_instalaciones[aparcamiento] = [];
           $(identificador).click(function(e) {
+            //0) Incluimos los usuarios asociados a ese aparcamiento en instalaciones
+            aparcamiento_activado = e.currentTarget.id;
+            $("#usuarios-asociados").html("");
+            var listaU = usuarios_instalaciones[aparcamiento_activado];
+            if (listaU != ""){
+              for(var i=0; i<listaU.length; i++){
+                $("#usuarios-asociados").append(listaU[i]);
+              }
+            }
             //1) Incluimos la descripción detallada del aparcamiento clickeado
             var num_park = e.currentTarget.id.split('-')[1];
             $('#desc-ppal').empty();
@@ -185,6 +199,7 @@ $("#mapa").hide();
     var nombre = $("#name").val();
     $("#name").val("");
     colecciones[nombre] = []; //diccionario con todas las colecciones
+    nombres_colecciones.push(nombre);
     var html = "<hr><h2 class='intro-text text-center'><li id='coleccion-" + nombre + "'><strong>" + nombre + "</strong></li></h2><hr>";
     $("#lista-colecciones").append(html);
     $("#coleccion-" + nombre).click(function(e){
@@ -194,20 +209,27 @@ $("#mapa").hide();
       var html = "<hr><h2 class='intro-text text-center'><strong>" + titulo + "</strong></h2><hr>";
       $("#titulo").html("");
       $("#titulo").html(html);
-      console.log(titulo);
+      //tambien en la pagina principal
+      $("#coleccion-ahora").html("");
+      $("#coleccion-ahora").append(html);
       if (colecciones[titulo] == ""){
-        console.log("if");
         $("#sortable-lis").html("");
         $("#sortable-lis").html("¡Aún no has añadido aparcamientos a esta colección!");
+        $("#coleccion-ahora").append("¡Aún no has añadido aparcamientos a esta colección!");
       }
       else{
-        console.log("else");
         list = colecciones[titulo];
+        var contenido = "";
+        if(list.length > 5){
+          $("#sortable-lis").css("overflow-y","scroll");
+          $("#sortable-lis").css("height", "600px");
+        }
         for (var i=0; i<list.length; i++){
-          contenido += "<div class='sortable sortable-list' id='elem-" + i.toString() + "'>" + list[i] + "</div>";
+          contenido += list[i];
         }
         $("#sortable-lis").html("");
         $("#sortable-lis").html(contenido);
+        $("#lista-ahora").append(contenido);
       }
     })
   })
@@ -272,23 +294,31 @@ $("#mapa").hide();
     }
   }
 
+  function hacerAparcClicks(){
+    var identificador = "";
+    for (var i = 0; i < num; i++){
+      identificador = "#parking2-" + i.toString();
+      $(identificador).click(function(e){
+        var len;
+        if (colecciones[coleccion_activada]==""){
+          colecciones[coleccion_activada] = [];
+          $("#sortable-lis").html("");
+        }
+        var nuevoelemento = "<div class='sortable' id='" + e.currentTarget.id + "'>" + e.currentTarget.innerHTML + "</div>";
+        if ($.inArray(nuevoelemento, colecciones[coleccion_activada]) == -1){
+          if (colecciones[coleccion_activada]==""){
+            colecciones[coleccion_activada][0] = nuevoelemento;
+          }
+          else{
+            len = colecciones[coleccion_activada].length;
+            colecciones[coleccion_activada][len] = nuevoelemento;
+          }
+          $("#sortable-lis").append(nuevoelemento);
+        }
 
-  $("#caja1").sortable({
-    items: "div",
-    connectWith: ".sortable"
-  }).disableSelection();
-
-  $("#caja2").sortable({
-    items: "div",
-    connectWith: ".sortable"
-  }).disableSelection();
-
-  $("#2a").sortable({
-    items: "div",
-    connectWith: ".sortable"
-  }).disableSelection();
-
-
+      }).disableSelection();
+    }
+  }
 
   $("#boton-usuarios").click(function(e){
     e.preventDefault();
@@ -344,13 +374,73 @@ $("#mapa").hide();
         html += "<h5>" + name + "</h5>";
         html += "</div>";
         usuarios_divs[num_usuarios] = html;
+        var identificador = '#user-' + num_usuarios.toString();
         num_usuarios = num_usuarios + 1;
         $("#usuarios").append(html);
         html = "";
+        $(identificador).click(function(e){
+          var elemento = "<div class='user' id="+ e.currentTarget.id + "'>" + e.currentTarget.innerHTML + "</div>";
+          usuarios_instalaciones[aparcamiento_activado].push(elemento);
+          $("#usuarios-asociados").append(elemento);
+        })
+
       });
     });
   }
 
+
+  $("#boton-guardar-git").click(function(e){
+    e.preventDefault();
+    var token = $("#git-token").val();
+    var user = $("#git-user").val();
+    var repo = $("#git-repo").val();
+    var file = $("#git-file").val();
+    ghub = new Github({
+      token: token,
+      auth: "oauth"
+    });
+    var data = {
+      "names": nombres_colecciones,
+      "collection": colecciones,
+      "users": usuarios_instalaciones
+    };
+    var repositorio = ghub.getRepo(user, repo);
+    var contenido = JSON.stringify(data);
+    var commit = "fichero";
+    repositorio.write('master', file, contenido, commit, function(e){console.log(e)});
+    alert("Guardados OK");
+  })
+
+
+  $("#boton-cargar-git").click(function(e){
+    e.preventDefault();
+    var token = $("#git-token").val();
+    var user = $("#git-user").val();
+    var repo = $("#git-repo").val();
+    var file = $("#git-file").val();
+    ghub = new Github({
+      token: token,
+      auth: "oauth"
+    })
+    var repositorio = ghub.getRepo(user, repo);
+    repositorio.read('master', file, function(err, data) {
+      data = JSON.parse(data);
+      nombres_colecciones = data.names;
+      colecciones = data.collection;
+      usuarios_instalaciones = data.users;
+      var pos;
+      $("#resultado-cargar-git").show();
+      $("#resultados-git").html("");
+      $("#resultados-git").append("Colecciones creadas:");
+      for(var i=0; i<nombres_colecciones.length; i++){
+        $("#resultados-git").append(nombres_colecciones[i] + "</br>");
+      }
+      for(var i=0; i<usuarios_instalaciones.length; i++){
+        $("#resultados-git").append(usuarios_instalaciones[i] + "</br>");
+      }
+      alert("Cargados OK");
+    })
+  })
 
 
 
