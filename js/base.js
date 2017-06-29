@@ -8,6 +8,7 @@ var longitude;
 var colecciones = [];
 var coleccion_activada;
 var usuarios_cargados = [];
+var usuarios_divs = [];
 var num_usuarios = 0;
 var api;
 $("#fotos").hide();
@@ -43,6 +44,12 @@ $("#mapa").hide();
     $("#principal").hide();
     $("#colecciones").hide();
     $("#instalaciones").show();
+    if (usuarios_divs.length>0){
+      $("#allUsers").html("");
+      for(var i=0; i<usuarios_divs.length; i++){
+        $("#allUsers").append(usuarios_divs[i]);
+      }
+    }
   })
 
   $('.carousel').carousel({
@@ -179,7 +186,7 @@ $("#mapa").hide();
     $("#name").val("");
     colecciones[nombre] = []; //diccionario con todas las colecciones
     var html = "<hr><h2 class='intro-text text-center'><li id='coleccion-" + nombre + "'><strong>" + nombre + "</strong></li></h2><hr>";
-    $("#lista-colecciones").html(html);
+    $("#lista-colecciones").append(html);
     $("#coleccion-" + nombre).click(function(e){
       e.preventDefault();
       var titulo = e.currentTarget.id.split('-')[1];
@@ -266,9 +273,26 @@ $("#mapa").hide();
   }
 
 
+  $("#caja1").sortable({
+    items: "div",
+    connectWith: ".sortable"
+  }).disableSelection();
+
+  $("#caja2").sortable({
+    items: "div",
+    connectWith: ".sortable"
+  }).disableSelection();
+
+  $("#2a").sortable({
+    items: "div",
+    connectWith: ".sortable"
+  }).disableSelection();
+
+
 
   $("#boton-usuarios").click(function(e){
     e.preventDefault();
+    usuarios_cargados = [];
     $("#cargarU").hide();
     api = $("#api").val();
     if(api == ""){
@@ -319,7 +343,7 @@ $("#mapa").hide();
         }
         html += "<h5>" + name + "</h5>";
         html += "</div>";
-        usuarios_cargados[num_usuarios] = html;
+        usuarios_divs[num_usuarios] = html;
         num_usuarios = num_usuarios + 1;
         $("#usuarios").append(html);
         html = "";
